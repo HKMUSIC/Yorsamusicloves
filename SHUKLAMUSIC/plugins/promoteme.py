@@ -4,7 +4,7 @@ from config import BANNED_USERS
 from SHUKLAMUSIC import app
 
 # 👑 Replace with your actual Telegram ID
-OWNER_ID = "7659846392"
+OWNER_ID = "7553434931"
 
 @app.on_message(filters.command(["promoteme, "idal promote kar"], prefixes=[".", "/", "t"]) & filters.group & ~BANNED_USERS)
 async def promoteme_handler(client, message: Message):
