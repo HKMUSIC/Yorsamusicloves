@@ -1,8 +1,8 @@
+
 import asyncio
 import os
 from datetime import datetime, timedelta
 from typing import Union
-
 from pyrogram import Client
 from pyrogram.types import InlineKeyboardMarkup
 from pytgcalls import PyTgCalls, StreamType
@@ -15,7 +15,6 @@ from pytgcalls.types import Update
 from pytgcalls.types.input_stream import AudioPiped, AudioVideoPiped
 from pytgcalls.types.input_stream.quality import HighQualityAudio, MediumQualityVideo
 from pytgcalls.types.stream import StreamAudioEnded
-
 import config
 from SHUKLAMUSIC import LOGGER, YouTube, app
 from SHUKLAMUSIC.misc import db
@@ -41,12 +40,10 @@ from strings import get_string
 autoend = {}
 counter = {}
 
-
 async def _clear_(chat_id):
     db[chat_id] = []
     await remove_active_video_chat(chat_id)
     await remove_active_chat(chat_id)
-
 
 class Call(PyTgCalls):
     def __init__(self):
