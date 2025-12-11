@@ -5,7 +5,7 @@ from pyrogram import filters
 import base64
 from os import getenv
 
-API_KEY = getenv("AIzaSyDgA9H65XPvRTQkRhDvx1BcjDHtaBdwB08")
+API_KEY = getenv("AIzaSyB8CwHUCWZFu1TJN0n1qraP2dAlPqUdGC8")
 
 # NEW GOOGLE API ENDPOINTS (LATEST)
 TEXT_MODEL_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
