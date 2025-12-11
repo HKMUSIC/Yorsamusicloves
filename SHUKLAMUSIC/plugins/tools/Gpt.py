@@ -1,80 +1,111 @@
 import requests
 from SHUKLAMUSIC import app
-from pyrogram.types import Message
-from pyrogram.enums import ChatAction, ParseMode
+from pyrogram.enums import ChatAction
 from pyrogram import filters
+import base64
+from os import getenv
 
-API_KEY = "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"
+API_KEY = getenv("AIzaSyDgA9H65XPvRTQkRhDvx1BcjDHtaBdwB08")
 
-BASE_URL = "https://api.groq.com/openai/v1/chat/completions"
+# NEW GOOGLE API ENDPOINTS (LATEST)
+TEXT_MODEL_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={API_KEY}"
+IMAGE_MODEL_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key={API_KEY}"
+
+# Keywords that trigger image generation
+IMAGE_KEYWORDS = [
+    "image", "photo", "picture", "draw", "generate an image",
+    "create an image", "make an image", "ai image", "create photo",
+    "generate photo", "draw me", "make a picture", "image of", "picture of"
+]
+
 
 @app.on_message(
     filters.command(
-        ["chatgpt", "ai", "ask", "gpt", "solve"],
+        ["ai", "ask", "chatgpt", "gpt", "solve"],
         prefixes=["+", ".", "/", "-", "", "$", "#", "&"],
     )
 )
-async def chat_gpt(bot, message):
+async def ai_handler(bot, message):
     try:
-        # Typing action when the bot is processing the message
         await bot.send_chat_action(message.chat.id, ChatAction.TYPING)
 
         if len(message.command) < 2:
-            # If no question is asked, send an example message
-            await message.reply_text(
-                "❍ ᴇxᴀᴍᴘʟᴇ:**\n\n/chatgpt ᴡʜᴏ ɪs ᴛʜᴇ ᴏᴡɴᴇʀ ᴏғ ˹ 𝐘ᴏʀꜱᴀ ꭙ 𝐌ᴜꜱɪᴄ ♪ ™˼?"
-            )
-        else:
-            # Extract the query from the user's message
-            query = message.text.split(' ', 1)[1]
-            print("Input query:", query)  # Debug input
+            return await message.reply_text("â Example:\n\n/ai create an image of a cute robot")
 
-            # Set up headers with Authorization and Content-Type
-            headers = {
-                "Authorization": f"Bearer {API_KEY}",
-                "Content-Type": "application/json"
-            }
+        query = message.text.split(" ", 1)[1]
 
-            # Prepare the payload with the correct model and user message
+        # Detect if image prompt
+        is_image_prompt = any(kw in query.lower() for kw in IMAGE_KEYWORDS)
+
+        # -------------------------------------------------------------------
+        # 1) IMAGE GENERATION (gemini-2.5-flash-image)
+        # -------------------------------------------------------------------
+        if is_image_prompt:
+            waiting = await message.reply_text("ðŸ–¼ Generating image... Please wait 4â€“6 seconds.")
+
             payload = {
-                "model": "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",  # Change model if needed
-                "messages": [
+                "contents": [
                     {
-                        "role": "user",
-                        "content": query  # User's question from the message
+                        "parts": [
+                            {"text": query}
+                        ]
                     }
                 ]
             }
 
-            # Send the POST request to the API
-            response = requests.post(BASE_URL, json=payload, headers=headers)
+            response = requests.post(IMAGE_MODEL_URL, json=payload)
 
-            # Debugging: print raw response
-            print("API Response Text:", response.text)  # Print raw response
-            print("Status Code:", response.status_code)  # Check the status code
-
-            # If the response is empty or not successful, handle the error
             if response.status_code != 200:
-                await message.reply_text(f"❍ ᴇʀʀᴏʀ: API request failed. Status code: {response.status_code}")
-            elif not response.text.strip():
-                await message.reply_text("❍ ᴇʀʀᴏʀ: API se koi valid data nahi mil raha hai. Response was empty.")
-            else:
-                # Attempt to parse the JSON response
-                try:
-                    response_data = response.json()
-                    print("API Response JSON:", response_data)  # Debug response JSON
+                return await waiting.edit_text(
+                    f"â ERROR generating image\nStatus Code: {response.status_code}\nResponse: {response.text}"
+                )
 
-                    # Get the assistant's response from the JSON data
-                    if "choices" in response_data and len(response_data["choices"]) > 0:
-                        result = response_data["choices"][0]["message"]["content"]
-                        await message.reply_text(
-                            f"{result} \n\nＡɴsᴡᴇʀᴇᴅ ʙʏ➛[ 𝐘ᴏʀꜱᴀ ꭙ 𝐌ᴜꜱɪᴄ ♪](https://t.me/Yorsamusic_bot)",
-                            parse_mode=ParseMode.MARKDOWN
-                        )
-                    else:
-                        await message.reply_text("❍ ᴇʀʀᴏʀ: No response from API.")
-                except ValueError:
-                    await message.reply_text("❍ ᴇʀʀᴏʀ: Invalid response format.")
+            data = response.json()
+
+            try:
+                # New output format
+                img_base64 = data["candidates"][0]["content"]["parts"][0]["inline_data"]["data"]
+                img_bytes = base64.b64decode(img_base64)
+
+            except Exception as e:
+                return await waiting.edit_text(
+                    f"â ERROR: Invalid image response.\n{e}\n\nRaw data:\n{data}"
+                )
+
+            await bot.send_photo(
+                chat_id=message.chat.id,
+                photo=img_bytes,
+                caption="âœ¨ **AI Generated Image**"
+            )
+
+            await waiting.delete()
+            return
+
+        # -------------------------------------------------------------------
+        # 2) TEXT GENERATION (gemini-2.5-flash)
+        # -------------------------------------------------------------------
+        payload = {
+            "contents": [
+                {"parts": [{"text": query}]}
+            ]
+        }
+
+        response = requests.post(TEXT_MODEL_URL, json=payload)
+
+        if response.status_code != 200:
+            return await message.reply_text(
+                f"â ERROR: Google API failed.\nStatus Code: {response.status_code}\nResponse: {response.text}"
+            )
+
+        data = response.json()
+
+        try:
+            result = data["candidates"][0]["content"]["parts"][0]["text"]
+        except Exception as e:
+            return await message.reply_text(f"â ERROR: Invalid text response.\n{e}")
+
+        await message.reply_text(result)
+
     except Exception as e:
-        # Catch any other exceptions and send an error message
-        await message.reply_text(f"**❍ ᴇʀʀᴏʀ: {e} ")
+        await message.reply_text(f"â ERROR: {e}")
+        
