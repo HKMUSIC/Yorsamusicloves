@@ -209,8 +209,8 @@ queue_7 : "\nᴄʟɪᴄᴋ ᴏɴ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ 
 queue_8 : "<b>{0} ᴘʟᴀʏᴇʀ</b>\n\n🎄 <b>sᴛʀᴇᴀᴍɪɴɢ :</b> {1}\n\n🔗 <b>sᴛʀᴇᴀᴍ ᴛʏᴘᴇ :</b> {2}\n <b>ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ :</b> {3}\n{4}"
 
 
-stream_1: "<b><blockquote>⟣ Sᴛᴀʀᴛᴇᴅ Sᴛʀᴇᴀᴍɪɴɢ ♪</blockquote></b>\n\n<b>◉ Tɪᴛʟᴇ:</b> <a href='{0}'>{1}</a>\n<b>◉ Dᴜʀᴀᴛɪᴏɴ:</b> {2} ᴍɪɴᴜᴛᴇs\n<b>◉ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ:</b> {3}\n<b><blockquote>◆ ᴘᴏᴡᴇʀᴇᴅ » 𝐆𐑴𝐣𝛐 𝐈𝐧𝐟𝛊𝐧𝛊𝐭𝐲𓆪</blockquote></b>"
-stream_2: "<b><blockquote>⟣ Sᴛʀᴇᴀᴍɪɴɢ Sᴛᴀʀᴛᴇᴅ ♪</blockquote></b>\n\n<b>◉ Sᴛʀᴇᴀᴍ ᴛʏᴘᴇ:</b> ʟɪᴠᴇ sᴛʀᴇᴀᴍ [ᴜʀʟ]\n<b>◉ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ:</b> {0}\n<b><blockquote>◆ ᴘᴏᴡᴇʀᴇᴅ » 𝐆𐑴𝐣𝛐 𝐈𝐧𝐟𝛊𝐧𝛊𝐭𝐲</blockquote></b>"
+stream_1 : "<blockquote> <b>▣ Sᴛᴧʀᴛєᴅ Sᴛʀєᴧϻιηɢ ♪</b></blockquote>\n<blockquote expandable><b>๏ Tιᴛʟє:</b> <a href={0}>{1}</a>\n<b>๏ Dᴜʀᴧᴛιση:</b> {2} ᴍιηᴜᴛєs\n๏ Rєǫᴜєsᴛєᴅ: {3}</blockquote>\n<blockquote>❖ ᴘᴏᴡєʀєᴅ» [𝐆𐑴𝐣𝛐 𝐈𝐧𝐟𝛊𝐧𝛊𝐭𝐲𓆪](https://t.me/II_YOUR_GOJO_ll)</blockquote>"
+stream_2 : "❍ <b>Sᴛʀᴇᴀᴍɪɴɢ Sᴛᴀʀᴛᴇᴅ </b>\n<b>❍ Sᴛʀᴇᴀᴍ ᴛʏᴘᴇ :</b> ʟɪᴠᴇ sᴛʀᴇᴀᴍ [ᴜʀʟ]\n<b>❍ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ :</b> {0}\n\n❖ ᴘᴏᴡᴇʀᴇᴅ ➥ [𝐆𐑴𝐣𝛐 𝐈𝐧𝐟𝛊𝐧𝛊𝐭𝐲𓆪](https://t.me/II_YOUR_GOJO_ll)"
 
 
 CLOSE_BUTTON  : "✧ ᴄʟᴏsᴇ ✧"
